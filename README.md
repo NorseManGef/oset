@@ -1,11 +1,8 @@
-This is my nix-flake based C++ development environment. 
+You are on an application development team and the architect has come up with a system design which requires a custom data structure. This custom structure will require O(1) runtime to insert and remove objects from it, but also support both forward and backward iteration in the order items were added to the structure. It have functions to provide the number of elements and convert it to a string representation. Design and implement this structure.
 
-# Dependencies
+This structure should be iterable.
 
-- Nix
-- Direnv
+The stream insertion operator should create a string representation of this structure which is a comma-separated list in brackets:
+[1, 2, 3, 4, 5]
 
-# Usage
-
-After making a new repository with this template, you must run `echo "use flake >> .envrc && direnv allow` in your project directory.
-You may also want to change the license, especially if you are not me.
+The structure should not allow the same object to be inserted twice.
