@@ -1,0 +1,19 @@
+If:
+  PathMatch: .*\.inc
+
+Index:
+  Background: true
+
+CompileFlags:
+  Add:
+    - -xc++-header
+    - -DCLANGD_ONLY
+    - -DDEBUG
+    - -Wall
+    - -Wextra
+
+  Compiler:
+    - g++
+
+Diagnostics:
+  UnusedIncludes: Strict
