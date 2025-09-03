@@ -1,0 +1,17 @@
+[
+  {
+    "arguments": [
+      "/nix/store/3ix5h74n7ar9950vwzp4dxmil70pmx0k-gcc-wrapper-13.3.0/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-I",
+      "Include",
+      "-o",
+      "bin/testoset",
+      "src/test_oset.cpp"
+    ],
+    "directory": "/home/norsemangef/Coding/C++/Projects/oset",
+    "file": "/home/norsemangef/Coding/C++/Projects/oset/src/test_oset.cpp",
+    "output": "/home/norsemangef/Coding/C++/Projects/oset/bin/testoset"
+  }
+]
