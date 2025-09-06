@@ -6,11 +6,13 @@
 #define OSET_H
 #include <iostream>
 
-namespace ianwio
+#pragma once
+
+namespace nmg
 {
     // forward declarations for friend operators
     template <typename T> class OSet;
-    template <typename T> std::ostream& operator << (std::ostream& out, const ianwio::OSet<T>& oset);
+    template <typename T> std::ostream& operator << (std::ostream& out, const nmg::OSet<T>& oset);
 
     template <typename T>
     class OSet
@@ -126,4 +128,6 @@ namespace ianwio
         friend std::ostream& operator << <>(std::ostream& out, const OSet<T>& oset);
     };
 };
+
+#include "oset.inc"
 #endif

@@ -28,7 +28,7 @@ static std::vector<int> generate_testdata(int count)
 
 TEST_CASE("created oset contains no data")
 {
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
     REQUIRE(oset.empty());
     REQUIRE(oset.size() == 0);
 }
@@ -36,7 +36,7 @@ TEST_CASE("created oset contains no data")
 TEST_CASE("adding items to oset increases size")
 {
     auto data = generate_testdata(100);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     int size = 0;
     for(auto a : data)
@@ -52,7 +52,7 @@ TEST_CASE("oset does not add duplicates")
 {
     auto data = generate_testdata(10);
     std::vector<int> copy(data);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     for(auto a : data)
     {
@@ -72,7 +72,7 @@ TEST_CASE("oset does not add duplicates")
 TEST_CASE("oset is iterable")
 {
     auto data = generate_testdata(100);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     for(auto a : data)
     {
@@ -90,7 +90,7 @@ TEST_CASE("oset is iterable")
 TEST_CASE("oset iterates in order")
 {
     auto data = generate_testdata(100);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     for(auto a : data)
     {
@@ -110,7 +110,7 @@ TEST_CASE("oset iterates in order")
 TEST_CASE("OSet iterates in reverse")
 {
     auto data = generate_testdata(100);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     for(auto a : data)
     {
@@ -130,7 +130,7 @@ TEST_CASE("OSet iterates in reverse")
 TEST_CASE("OSet clears")
 {
     auto data = generate_testdata(100);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     for(auto a : data)
     {
@@ -147,7 +147,7 @@ TEST_CASE("OSet clears")
 TEST_CASE("OSet removes items")
 {
     auto data = generate_testdata(100);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     for(auto a : data)
     {
@@ -173,7 +173,7 @@ TEST_CASE("OSet removes items")
 TEST_CASE("OSet does not remove nonexistent items")
 {
     auto data = generate_testdata(101);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     auto target = data.pop_back();
 
@@ -193,7 +193,7 @@ TEST_CASE("OSet does not remove nonexistent items")
 TEST_CASE("OSet can re-add items after removal")
 {
     auto data = generate_testdata(100);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     auto target = data[data.size()/2];
 
@@ -223,7 +223,7 @@ TEST_CASE("OSet can re-add items after removal")
 TEST_CASE("OSet removal maintains order")
 {
     auto data = generate_testdata(100);
-    ianwio::OSet<int> oset;
+    nmg::OSet<int> oset;
 
     auto target_index = data.size()/2;
     auto target = data[target_index];
