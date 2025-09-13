@@ -1,30 +1,43 @@
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 
 #include "oset.h"
+
+#include "hash.h"
 
 #define TT template <typename T>
 #define OST nmg::OSet<T>
 
 TT OST::OSet()
+    : _capacity(DEFAULT_CAPACITY), _size(0), _head(nullptr), _tail(nullptr)
 {
-    // TODO
+    _data = new Node_t*[_capacity];
+    for (int i = 0; i < _capacity; ++i)
+    {
+        _data[i] = nullptr;
+    }
 }
 
 TT OST::OSet(const OST& other)
+    : _capacity(other._capacity), _size(other._size)
 {
-    // TODO
+    _data = new Node_t*[_capacity];
+    std::copy(other._data, other._data + _capacity, _data);
+    copy_list(other._head);
 }
 
 TT OST::OSet(const OST&& other)
+    : _capacity(other._capacity), _size(other._size), _data(other._data), _head(other._head), _tail(other._tail)
 {
-    // TODO
+    other._data = nullptr;
 }
 
 TT OST::~OSet()
 {
-    // TODO
+    clear();
+    delete _data;
 }
 
 /********** ITERATION **********/
@@ -73,17 +86,28 @@ TT typename OST::const_iterator OST::crend() const
 
 TT size_t OST::size() const
 {
-    // TODO
+    return _size;
 }
 
 TT bool OST::empty() const
 {
-    // TODO
+    return _size == 0;
 }
 
 TT bool OST::contains(const T& item) const
 {
-    // TODO
+    hash_t hval = hash(item);
+    int index = hval % _capacity;
+
+    for(int i = 0; i < MAX_COLLISION_AMMOUNT; ++i)
+    {
+        if(_data[index] != nullptr && _data[index]->_data == item)
+        {
+            return true;
+        }
+        index = index*index;
+    }
+    return false;
 }
 
 /********** MUTATION **********/
