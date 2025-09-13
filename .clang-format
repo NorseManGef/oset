@@ -1,5 +1,7 @@
 IndentWidth: 4
 TabWidth: 4
 
-BreakBeforeBraces: Stroustrup
+BasedOnStyle: Microsoft
 PointerAlignment: Left
+
+PackConstructorInitializers: NextLineOnly
