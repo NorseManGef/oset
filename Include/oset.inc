@@ -228,7 +228,14 @@ TT OST& OST::operator+=(const T& item)
 
 TT std::ostream& operator<<(std::ostream& out, const OST& oset)
 {
-    // TODO
+    out << "[";
+    nmg::Node<T>* current = oset._head;
+    for(; current->next != nullptr; current = current->next)
+    {
+        out << current->_data << ", ";
+    }
+    out << current->_data;
+    out << "]";
 }
 
 TT bool OST::findItem(int index, const T& item)
