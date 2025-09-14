@@ -99,27 +99,78 @@ TT bool OST::contains(const T& item) const
     hash_t hval = hash(item);
     int index = hval % _capacity;
 
-    for(int i = 0; i < MAX_COLLISION_AMMOUNT; ++i)
-    {
-        if(_data[index] != nullptr && _data[index]->_data == item)
-        {
-            return true;
-        }
-        index = index*index;
-    }
-    return false;
+    return findItem(index, item);
 }
 
 /********** MUTATION **********/
 
 TT bool OST::add(const T& item)
 {
-    // TODO
+    hash_t hval = hash(item);
+    int index = hval % _capacity;
+
+    if (findItem(index, item))
+    {
+        return false;
+    }
+
+    Node_t* node = new Node_t(item);
+    node->prev = _tail;
+    _tail->next = node;
+    _tail = node;
+
+    // attempt to add MAX_COLLISION_AMOUNT times, if it fails: resize, and try again.
+    bool needsResize = true;
+    for (int i = 0; i < MAX_COLLISION_AMOUNT; ++i)
+    {
+        if (_data[index] == nullptr)
+        {
+            _data[index] = node;
+            needsResize = false;
+            break;
+        }
+        else
+        {
+            index = index * index;
+        }
+    }
+    if (needsResize)
+    {
+        resize_data();
+        add(item);
+    }
+
+    ++_size;
+    return true;
 }
 
 TT bool OST::remove(const T& item)
 {
-    // TODO
+    hash_t hval = hash(item);
+    int index = hval % _capacity;
+
+    // searches for the item. If not found, return false, else remove.
+    bool itemFound = false;
+    for (int i = 0; i < MAX_COLLISION_AMOUNT; ++i)
+    {
+        if (_data[index] != nullptr && _data[index] == item)
+        {
+            itemFound = true;
+            break;
+        }
+        index = index * index;
+    }
+    if (!itemFound)
+    {
+        return false;
+    }
+
+    remove_node(_data[index]);
+
+    _data[index] = nullptr;
+
+    --_size;
+    return true;
 }
 
 TT void OST::clear()
@@ -147,4 +198,29 @@ TT OST& OST::operator+=(const T& item)
 TT std::ostream& operator<<(std::ostream& out, const OST& oset)
 {
     // TODO
+}
+
+TT bool OST::findItem(int index, const T& item)
+{
+    for (int i = 0; i < MAX_COLLISION_AMOUNT; ++i)
+    {
+        if (_data[index] != nullptr && _data[index]->_data == item)
+        {
+            return true;
+        }
+        index = index * index;
+    }
+    return false;
+}
+
+TT void OST::remove_node(Node_t* node)
+{
+    if (node->prev != nullptr)
+        node->prev->next = node->next;
+    else
+        _head = node->next;
+    if (node->next != nullptr)
+        node->next->prev = node->prev;
+    else
+        _tail = node->prev;
 }

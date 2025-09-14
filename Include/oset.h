@@ -12,7 +12,7 @@ namespace nmg
 {
 
 const size_t DEFAULT_CAPACITY = 64;
-const int MAX_COLLISION_AMMOUNT = 4;
+const int MAX_COLLISION_AMOUNT = 4;
 // forward declarations for friend operators
 template <typename T> class OSet;
 template <typename T> std::ostream& operator<<(std::ostream& out, const nmg::OSet<T>& oset);
@@ -22,6 +22,11 @@ template <typename T> struct Node
     T _data;
     Node<T>* next;
     Node<T>* prev;
+
+    explicit Node(const T& item)
+        : next(nullptr), prev(nullptr), _data(item)
+    {
+    }
 };
 
 template <typename T> class OSet
@@ -145,6 +150,8 @@ template <typename T> class OSet
 
     void copy_list(const Node_t* source);
     void resize_data();
+    bool findItem(int index, const T& item);
+    void remove_node(Node_t* node);
 };
 }; // namespace nmg
 
