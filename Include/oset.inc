@@ -175,24 +175,55 @@ TT bool OST::remove(const T& item)
 
 TT void OST::clear()
 {
-    // TODO
+    delete[] _data;
+
+    clear_list();
+    _size = 0;
+    _capacity = 0;
 }
 
 /********** OPERATORS **********/
 
 TT OST& OST::operator=(const OST& other)
 {
-    // TODO
+    if (this != other)
+    {
+        _size = other._size;
+        _capacity = other._capacity;
+        delete[] _data;
+        _data = new Node_t*[_capacity];
+        std::copy(other._data, other._data + _capacity, _data);
+
+        copy_list(other._head);
+    }
+    return *this;
 }
 
 TT OST& OST::operator=(const OST&& other)
 {
-    // TODO
+    _data = other._data;
+    other._data = nullptr;
+
+    _head = other._head;
+    other._head = nullptr;
+
+    _tail = other._tail;
+    other._tail = nullptr;
+
+    _size = other._size;
+    other->_size = 0;
+
+    _capacity = other._capacity;
+    other->_capacity = 0;
 }
 
 TT OST& OST::operator+=(const T& item)
 {
-    // TODO
+    if(!add(item))
+    {
+        throw item_already_exists("item: " << item << " already present in set");
+    }
+    return *this;
 }
 
 TT std::ostream& operator<<(std::ostream& out, const OST& oset)
@@ -223,4 +254,35 @@ TT void OST::remove_node(Node_t* node)
         node->next->prev = node->prev;
     else
         _tail = node->prev;
+}
+
+TT void OST::clear_list()
+{
+    while (_head != nullptr)
+    {
+        Node_t* node = _head;
+        _head = _head->next;
+        delete node;
+    }
+}
+
+TT void OST::copy_list(const Node_t* source)
+{
+    if (_head != nullptr)
+    {
+        clear_list();
+    }
+
+    _head = new Node_t*(source->_data);
+    _tail = _head;
+    source = source->next;
+
+    while (source != nullptr)
+    {
+        _tail->next = new Node_t*(source->_data);
+        _tail->next->prev = _tail;
+        
+        _tail = _tail->next;
+        source = source->next;
+    }
 }

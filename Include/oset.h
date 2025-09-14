@@ -5,6 +5,7 @@
 #ifndef OSET_H
 #define OSET_H
 #include <iostream>
+#include <stdexcept>
 
 #pragma once
 
@@ -17,7 +18,21 @@ const int MAX_COLLISION_AMOUNT = 4;
 template <typename T> class OSet;
 template <typename T> std::ostream& operator<<(std::ostream& out, const nmg::OSet<T>& oset);
 
-template <typename T> struct Node
+struct item_already_exists : public std::logic_error
+{
+    item_already_exists(const char* message)
+        : std::logic_error(message)
+    {
+    }
+
+    item_already_exists()
+        : std::logic_error("item already exists")
+    {
+    }
+};
+
+template <typename T>
+struct Node
 {
     T _data;
     Node<T>* next;
@@ -149,6 +164,7 @@ template <typename T> class OSet
     Node_t* _tail;
 
     void copy_list(const Node_t* source);
+    void clear_list();
     void resize_data();
     bool findItem(int index, const T& item);
     void remove_node(Node_t* node);
