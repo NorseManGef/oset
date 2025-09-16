@@ -2,12 +2,14 @@
     An ordered set. Efficient insertion, retrieval, and removal,
     while maintaining insertion order.
 */
+
+#pragma once
 #ifndef OSET_H
 #define OSET_H
 #include <iostream>
 #include <stdexcept>
+#include "SetIterator.h"
 
-#pragma once
 
 namespace nmg
 {
@@ -31,8 +33,7 @@ struct item_already_exists : public std::logic_error
     }
 };
 
-template <typename T>
-struct Node
+template <typename T> struct Node
 {
     T _data;
     Node<T>* next;
@@ -49,8 +50,8 @@ template <typename T> class OSet
   public:
     /********** ALIASES **********/
 
-    using iterator = void;       // TODO
-    using const_iterator = void; // TODO
+    using iterator = SetIterator<T, size_t>;
+    using const_iterator = ConstSetIterator<T, size_t>;
     using Node_t = Node<T>;
 
     /********** CONSTRUCTORS **********/
