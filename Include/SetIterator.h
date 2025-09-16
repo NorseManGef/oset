@@ -35,8 +35,8 @@ template <typename T, typename sizeT, typename refT, typename ptrT> class SetIte
 
     self& operator=(const self& other);
 
-    bool operator==(const self& other);
-    bool operator!=(const self& other);
+    bool operator==(const self& other) const;
+    bool operator!=(const self& other) const;
 
   protected:
     SetIteratorBase(Node<T>* node, bool isReverse);
@@ -84,4 +84,4 @@ template <typename T, typename sizeT> class ConstSetIterator : public SetIterato
 #undef STB
 #undef CSTB
 
-#include "oset.inc"
+#include "SetIterator.inc"
