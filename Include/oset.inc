@@ -44,42 +44,42 @@ TT OST::~OSet()
 
 TT typename OST::iterator OST::begin()
 {
-    // TODO
+    return iterator(_head, false);
 }
 
 TT typename OST::const_iterator OST::cbegin() const
 {
-    // TODO
+    return const_iterator(_head, false);
 }
 
 TT typename OST::iterator OST::rbegin()
 {
-    // TODO
+    return iterator(_head, true);
 }
 
 TT typename OST::const_iterator OST::crbegin() const
 {
-    // TODO
+    return const_iterator(_head, true);
 }
 
 TT typename OST::iterator OST::end()
 {
-    // TODO
+    return iterator(_tail, false);
 }
 
 TT typename OST::const_iterator OST::cend() const
 {
-    // TODO
+    return const_iterator(_tail, false);
 }
 
 TT typename OST::iterator OST::rend()
 {
-    // TODO
+    return iterator(_tail, true);
 }
 
 TT typename OST::const_iterator OST::crend() const
 {
-    // TODO
+    return const_iterator(_tail, true);
 }
 
 /********** DATA **********/
