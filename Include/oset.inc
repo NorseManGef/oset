@@ -107,9 +107,9 @@ TT bool OST::contains(const T& item) const
 TT bool OST::add(const T& item)
 {
     hash_t hval = hash(item);
-    int index = hval % _capacity;
+    int base = hval % _capacity;
 
-    if (findItem(index, item))
+    if (findItem(base, item))
     {
         return false;
     }
@@ -119,10 +119,14 @@ TT bool OST::add(const T& item)
     _tail->next = node;
     _tail = node;
 
+    int offset = 0;
+
     // attempt to add MAX_COLLISION_AMOUNT times, if it fails: resize, and try again.
     bool needsResize = true;
     for (int i = 0; i < MAX_COLLISION_AMOUNT; ++i)
     {
+        int index = (base + offset) % _capacity;
+
         if (_data[index] == nullptr)
         {
             _data[index] = node;
@@ -131,7 +135,7 @@ TT bool OST::add(const T& item)
         }
         else
         {
-            index = index * index;
+            offset = offset == 0 ? 2 : offset * 2;
         }
     }
     if (needsResize)
@@ -147,18 +151,23 @@ TT bool OST::add(const T& item)
 TT bool OST::remove(const T& item)
 {
     hash_t hval = hash(item);
-    int index = hval % _capacity;
+    int base = hval % _capacity;
+    int offset = 0;
+
+    int index;
 
     // searches for the item. If not found, return false, else remove.
     bool itemFound = false;
     for (int i = 0; i < MAX_COLLISION_AMOUNT; ++i)
     {
-        if (_data[index] != nullptr && _data[index] == item)
+        index = (base + offset) % _capacity;
+
+        if (_data[index] != nullptr && _data[index]->_data == item)
         {
             itemFound = true;
             break;
         }
-        index = index * index;
+        offset = offset == 0 ? 2 : offset * 2;
     }
     if (!itemFound)
     {
@@ -219,7 +228,7 @@ TT OST& OST::operator=(const OST&& other)
 
 TT OST& OST::operator+=(const T& item)
 {
-    if(!add(item))
+    if (!add(item))
     {
         throw item_already_exists("item: " << item << " already present in set");
     }
@@ -230,23 +239,27 @@ TT std::ostream& operator<<(std::ostream& out, const OST& oset)
 {
     out << "[";
     nmg::Node<T>* current = oset._head;
-    for(; current->next != nullptr; current = current->next)
+    for (; current->next != nullptr; current = current->next)
     {
         out << current->_data << ", ";
     }
     out << current->_data;
     out << "]";
+    return out;
 }
 
-TT bool OST::findItem(int index, const T& item)
+TT bool OST::findItem(int base, const T& item) const
 {
     for (int i = 0; i < MAX_COLLISION_AMOUNT; ++i)
     {
+        int offset = 0;
+
+        int index = (base + offset) % _capacity;
         if (_data[index] != nullptr && _data[index]->_data == item)
         {
             return true;
         }
-        index = index * index;
+        offset = offset == 0 ? 2 : offset * 2;
     }
     return false;
 }
@@ -288,8 +301,50 @@ TT void OST::copy_list(const Node_t* source)
     {
         _tail->next = new Node_t*(source->_data);
         _tail->next->prev = _tail;
-        
+
         _tail = _tail->next;
         source = source->next;
     }
+}
+
+TT void OST::resize_data()
+{
+    bool needsResize;
+    do {
+        delete[] _data;
+        _capacity = _capacity * 4;
+
+        _data = new Node_t*[_capacity];
+
+        for (int i = 0; i < _capacity; ++i)
+        {
+            _data[i] = nullptr;
+        }
+
+
+        for (Node_t* current = _head; current != nullptr; current = current->next)
+        {
+            hash_t hval = hash(current->_data);
+            int base = hval % _capacity;
+
+            int offset = 0;
+            
+            needsResize = true;
+            for(int i = 0; i < MAX_COLLISION_AMOUNT; ++i){
+                int index = (base + offset) & _capacity;
+                if (_data[index] == nullptr)
+                {
+                    _data[index] = current;
+                    needsResize = false;
+                    break;
+                }
+                else
+                {
+                    offset = offset == 0 ? 2 : offset * 2;
+                }
+            }
+            if (needsResize) break;
+        }
+    }
+    while (needsResize);
 }
