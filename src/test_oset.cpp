@@ -1,3 +1,4 @@
+#include <cstdlib>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 #include <oset.h>
@@ -5,7 +6,7 @@
 #include <set>
 #include <random>
 
-static std::default_random_engine random;
+static std::default_random_engine randomVar;
 
 static std::vector<int> generate_testdata(int count)
 {
@@ -17,7 +18,7 @@ static std::vector<int> generate_testdata(int count)
         int n;
         do
         {
-            n = dist(random);
+            n = dist(randomVar);
         }
         while(numbers.contains(n));
         numbers.insert(n);        
@@ -175,7 +176,8 @@ TEST_CASE("OSet does not remove nonexistent items")
     auto data = generate_testdata(101);
     nmg::OSet<int> oset;
 
-    auto target = data.pop_back();
+    auto target = data.back();
+    data.pop_back();
 
     for(auto a : data)
     {
