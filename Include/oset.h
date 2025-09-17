@@ -167,7 +167,7 @@ template <typename T> class OSet
     void copy_list(const Node_t* source);
     void clear_list();
     void resize_data();
-    bool findItem(int index, const T& item);
+    bool findItem(int index, const T& item) const;
     void remove_node(Node_t* node);
 };
 }; // namespace nmg
