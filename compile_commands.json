@@ -3,6 +3,8 @@
     "arguments": [
       "/nix/store/3ix5h74n7ar9950vwzp4dxmil70pmx0k-gcc-wrapper-13.3.0/bin/g++",
       "-c",
+      "-g",
+      "-O0",
       "-std=c++20",
       "-I",
       "Include",

@@ -1,5 +1,5 @@
 bin/testoset: src/test_oset.cpp Include/oset.h | bin
-	g++ -std=c++20 -o bin/testoset -I Include src/test_oset.cpp
+	g++ -g -O0 -std=c++20 -o bin/testoset -I Include src/test_oset.cpp
 
 test: bin/testoset
 	./bin/testoset
