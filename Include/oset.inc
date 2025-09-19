@@ -37,7 +37,6 @@ TT OST::OSet(const OST&& other)
 TT OST::~OSet()
 {
     clear();
-    delete _data;
 }
 
 /********** ITERATION **********/
