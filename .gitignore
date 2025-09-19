@@ -36,3 +36,5 @@
 .direnv
 .envrc
 .cache
+
+bin/
