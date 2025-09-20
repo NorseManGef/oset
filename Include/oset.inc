@@ -114,9 +114,17 @@ TT bool OST::add(const T& item)
     }
 
     Node_t* node = new Node_t(item);
-    node->prev = _tail;
-    _tail->next = node;
-    _tail = node;
+    if (_tail != nullptr)
+    {
+        node->prev = _tail;
+        _tail->next = node;
+        _tail = node;
+    }
+    else
+    {
+        node = _tail;
+        node = _head;
+    }
 
     int offset = 0;
 
