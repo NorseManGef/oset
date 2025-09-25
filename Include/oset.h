@@ -15,7 +15,7 @@ namespace nmg
 {
 
 const size_t DEFAULT_CAPACITY = 64;
-const int MAX_COLLISION_AMOUNT = 4;
+const int MAX_COLLISION_AMOUNT = 5;
 // forward declarations for friend operators
 template <typename T> class OSet;
 template <typename T> std::ostream& operator<<(std::ostream& out, const nmg::OSet<T>& oset);

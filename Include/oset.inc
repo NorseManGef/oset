@@ -113,6 +113,11 @@ TT bool OST::add(const T& item)
         return false;
     }
 
+    if (item == 5714)
+    {
+        std::cout << "stuff" << std::endl;
+    }
+
     Node_t* node = new Node_t(item);
     if (_tail != nullptr)
     {
@@ -122,8 +127,8 @@ TT bool OST::add(const T& item)
     }
     else
     {
-        node = _tail;
-        node = _head;
+        _tail = node;
+        _head = node;
     }
 
     int offset = 0;
@@ -147,6 +152,7 @@ TT bool OST::add(const T& item)
     }
     if (needsResize)
     {
+        std::cout << "resize called from add()" << std::endl;
         resize_data();
         add(item);
     }
@@ -192,6 +198,7 @@ TT bool OST::remove(const T& item)
 TT void OST::clear()
 {
     delete[] _data;
+    _data = nullptr;
 
     clear_list();
     _size = 0;
@@ -316,6 +323,7 @@ TT void OST::copy_list(const Node_t* source)
 
 TT void OST::resize_data()
 {
+    std::cout << "resize called" << std::endl;
     bool needsResize;
     do {
         delete[] _data;
@@ -338,7 +346,7 @@ TT void OST::resize_data()
             
             needsResize = true;
             for(int i = 0; i < MAX_COLLISION_AMOUNT; ++i){
-                int index = (base + offset) & _capacity;
+                int index = (base + offset) % _capacity;
                 if (_data[index] == nullptr)
                 {
                     _data[index] = current;

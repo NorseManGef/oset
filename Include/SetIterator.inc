@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SetIterator.h"
+#include <stdexcept>
 
 #define TTSRP template <typename T, typename sizeT, typename refT, typename ptrT>
 #define STB nmg::SetIteratorBase<T, sizeT, refT, ptrT>
@@ -14,13 +15,16 @@
 
 TTSRP typename STB::self& STB::operator++() // prefix
 {
-    if (isReverse)
+    if (node != nullptr)
     {
-        node = node->prev;
-    }
-    else
-    {
-        node = node->next;
+        if (isReverse)
+        {
+            node = node->prev;
+        }
+        else
+        {
+            node = node->next;
+        }
     }
     return *this;
 }
@@ -28,13 +32,16 @@ TTSRP typename STB::self& STB::operator++() // prefix
 TTSRP typename STB::self STB::operator++(int)
 {
     self tempIt(*this);
-    if (isReverse)
+    if (node != nullptr)
     {
-        node = node->prev;
-    }
-    else
-    {
-        node = node->next;
+        if (isReverse)
+        {
+            node = node->prev;
+        }
+        else
+        {
+            node = node->next;
+        }
     }
     return tempIt;
 }
@@ -68,6 +75,10 @@ TTSRP typename STB::self STB::operator--(int)
 
 TTSRP typename STB::reference STB::operator*()
 {
+    if (node == nullptr)
+    {
+        throw std::out_of_range("node is null");
+    }
     return node->_data;
 }
 

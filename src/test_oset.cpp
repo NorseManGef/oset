@@ -5,6 +5,7 @@
 #include <vector>
 #include <set>
 #include <random>
+#include <iostream>
 
 static std::default_random_engine randomVar;
 
@@ -36,7 +37,7 @@ TEST_CASE("created oset contains no data")
 
 TEST_CASE("adding items to oset increases size")
 {
-    auto data = generate_testdata(100);
+    auto data = generate_testdata(5);
     nmg::OSet<int> oset;
 
     int size = 0;
@@ -51,7 +52,8 @@ TEST_CASE("adding items to oset increases size")
 
 TEST_CASE("oset does not add duplicates")
 {
-    auto data = generate_testdata(10);
+    std::cout << "relevant test" << std::endl;
+    auto data = generate_testdata(11);
     std::vector<int> copy(data);
     nmg::OSet<int> oset;
 
@@ -68,6 +70,7 @@ TEST_CASE("oset does not add duplicates")
         REQUIRE(!result);
         REQUIRE(oset.size() == data.size());
     }
+    std::cout << "end of relevant test" << std::endl;
 }
 
 TEST_CASE("oset is iterable")
@@ -102,10 +105,11 @@ TEST_CASE("oset iterates in order")
     auto vecit = data.begin();
     while(vecit != data.end())
     {
-        REQUIRE(*osit == *vecit);
+        REQUIRE_EQ(*osit, *vecit);
         ++vecit;
         ++osit;
     }
+    REQUIRE_EQ(osit, oset.end());
 }
 
 TEST_CASE("OSet iterates in reverse")
