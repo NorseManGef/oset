@@ -5,6 +5,10 @@
 #include <vector>
 #include <set>
 #include <random>
+#include "gravedata.h"
+
+using gint = nmg::GraveData;
+using gset = nmg::OSet<gint>;
 
 
 static std::default_random_engine randomVar;
@@ -30,15 +34,19 @@ static std::vector<int> generate_testdata(int count)
 
 TEST_CASE("created oset contains no data")
 {
-    nmg::OSet<int> oset;
+    gint::init();
+
+    gset oset;
     REQUIRE(oset.empty());
     REQUIRE(oset.size() == 0);
+    REQUIRE_EQ(0, gint::count());
 }
 
 TEST_CASE("adding items to oset increases size")
 {
+    gint::init();
     auto data = generate_testdata(5);
-    nmg::OSet<int> oset;
+    gset oset;
 
     int size = 0;
     for(auto a : data)
@@ -46,15 +54,19 @@ TEST_CASE("adding items to oset increases size")
         auto result = oset.add(a);
         REQUIRE(result);
         REQUIRE(oset.size() == ++size);
+        REQUIRE_EQ(size, gint::count());
     }
     REQUIRE(oset.size() == data.size());
+    REQUIRE_EQ(gint::count(), data.size());
 }
 
 TEST_CASE("oset does not add duplicates")
 {
+    gint::init();
+
     auto data = generate_testdata(11);
     std::vector<int> copy(data);
-    nmg::OSet<int> oset;
+    gset oset;
 
     for(auto a : data)
     {
@@ -68,13 +80,15 @@ TEST_CASE("oset does not add duplicates")
         auto result = oset.add(a);
         REQUIRE(!result);
         REQUIRE(oset.size() == data.size());
+        REQUIRE_EQ(gint::count(), data.size());
     }
 }
 
 TEST_CASE("oset is iterable")
 {
+    gint::init();
     auto data = generate_testdata(100);
-    nmg::OSet<int> oset;
+    gset oset;
 
     for(auto a : data)
     {
@@ -87,12 +101,14 @@ TEST_CASE("oset is iterable")
         iterated = true;
     }
     REQUIRE(iterated);
+    REQUIRE_EQ(gint::count(), data.size());
 }
 
 TEST_CASE("oset iterates in order")
 {
+    gint::init();
     auto data = generate_testdata(100);
-    nmg::OSet<int> oset;
+    gset oset;
 
     for(auto a : data)
     {
@@ -108,12 +124,14 @@ TEST_CASE("oset iterates in order")
         ++osit;
     }
     REQUIRE_EQ(osit, oset.end());
+    REQUIRE_EQ(gint::count(), data.size());
 }
 
 TEST_CASE("OSet iterates in reverse")
 {
+    gint::init();
     auto data = generate_testdata(100);
-    nmg::OSet<int> oset;
+    gset oset;
 
     for(auto a : data)
     {
@@ -128,12 +146,14 @@ TEST_CASE("OSet iterates in reverse")
         ++vecit;
         ++osit;
     }
+    REQUIRE_EQ(gint::count(), data.size());
 }
 
 TEST_CASE("OSet clears")
 {
+    gint::init();
     auto data = generate_testdata(100);
-    nmg::OSet<int> oset;
+    gset oset;
 
     for(auto a : data)
     {
@@ -145,12 +165,14 @@ TEST_CASE("OSet clears")
     oset.clear();
 
     REQUIRE(oset.size() == 0);
+    REQUIRE_EQ(gint::count(), 0);
 }
 
 TEST_CASE("OSet removes items")
 {
+    gint::init();
     auto data = generate_testdata(100);
-    nmg::OSet<int> oset;
+    gset oset;
 
     for(auto a : data)
     {
@@ -166,6 +188,7 @@ TEST_CASE("OSet removes items")
     REQUIRE(result);
     REQUIRE(oset.size() == data.size()-1);
     REQUIRE(!oset.contains(target));
+    REQUIRE(gint::count() == oset.size());
 
     for(auto a : oset)
     {
@@ -175,8 +198,9 @@ TEST_CASE("OSet removes items")
 
 TEST_CASE("OSet does not remove nonexistent items")
 {
+    gint::init();
     auto data = generate_testdata(101);
-    nmg::OSet<int> oset;
+    gset oset;
 
     auto target = data.back();
     data.pop_back();
@@ -192,12 +216,14 @@ TEST_CASE("OSet does not remove nonexistent items")
 
     REQUIRE(!result);
     REQUIRE(oset.size() == data.size());
+    REQUIRE_EQ(gint::count(), data.size());
 }
 
 TEST_CASE("OSet can re-add items after removal")
 {
+    gint::init();
     auto data = generate_testdata(100);
-    nmg::OSet<int> oset;
+    gset oset;
 
     for(int i = 0; i < data.size(); ++i)
     {
@@ -227,12 +253,14 @@ TEST_CASE("OSet can re-add items after removal")
     REQUIRE(oset.size() == data.size());
 
     REQUIRE(*(oset.rbegin()) == target);
+    REQUIRE_EQ(gint::count(), data.size());
 }
 
 TEST_CASE("OSet removal maintains order")
 {
+    gint::init();
     auto data = generate_testdata(100);
-    nmg::OSet<int> oset;
+    gset oset;
 
     auto target_index = data.size()/2;
     auto target = data[target_index];
@@ -258,4 +286,5 @@ TEST_CASE("OSet removal maintains order")
         ++vecit;
         ++osit;
     }
+    REQUIRE_EQ(gint::count(), data.size());
 }
