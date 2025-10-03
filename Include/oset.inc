@@ -53,32 +53,32 @@ TT typename OST::const_iterator OST::cbegin() const
 
 TT typename OST::iterator OST::rbegin()
 {
-    return iterator(_head, true);
+    return iterator(_tail, true);
 }
 
 TT typename OST::const_iterator OST::crbegin() const
 {
-    return const_iterator(_head, true);
+    return const_iterator(_tail, true);
 }
 
 TT typename OST::iterator OST::end()
 {
-    return iterator(_tail, false);
+    return iterator(nullptr, false);
 }
 
 TT typename OST::const_iterator OST::cend() const
 {
-    return const_iterator(_tail, false);
+    return const_iterator(nullptr, false);
 }
 
 TT typename OST::iterator OST::rend()
 {
-    return iterator(_tail, true);
+    return iterator(nullptr, true);
 }
 
 TT typename OST::const_iterator OST::crend() const
 {
-    return const_iterator(_tail, true);
+    return const_iterator(nullptr, true);
 }
 
 /********** DATA **********/
@@ -111,11 +111,6 @@ TT bool OST::add(const T& item)
     if (findItem(base, item))
     {
         return false;
-    }
-
-    if (item == 5714)
-    {
-        std::cout << "stuff" << std::endl;
     }
 
     Node_t* node = new Node_t(item);
@@ -152,7 +147,6 @@ TT bool OST::add(const T& item)
     }
     if (needsResize)
     {
-        std::cout << "resize called from add()" << std::endl;
         resize_data();
         add(item);
     }
@@ -264,10 +258,10 @@ TT std::ostream& operator<<(std::ostream& out, const OST& oset)
 
 TT bool OST::findItem(int base, const T& item) const
 {
+    int offset = 0;
+
     for (int i = 0; i < MAX_COLLISION_AMOUNT; ++i)
     {
-        int offset = 0;
-
         int index = (base + offset) % _capacity;
         if (_data[index] != nullptr && _data[index]->_data == item)
         {
@@ -323,7 +317,6 @@ TT void OST::copy_list(const Node_t* source)
 
 TT void OST::resize_data()
 {
-    std::cout << "resize called" << std::endl;
     bool needsResize;
     do {
         delete[] _data;

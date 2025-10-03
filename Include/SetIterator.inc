@@ -99,12 +99,12 @@ TTSRP typename STB::self& STB::operator=(const self& other)
 
 TTSRP bool STB::operator==(const self& other) const
 {
-    return node == other.node && isReverse == other.isReverse;
+    return node == other.node;
 }
 
 TTSRP bool STB::operator!=(const self& other) const
 {
-    return node != other.node && isReverse != other.isReverse;
+    return node != other.node;
 }
 
 STBT::SetIteratorBase(Node<T>* node, bool isReverse)
