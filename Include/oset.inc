@@ -182,7 +182,8 @@ TT bool OST::remove(const T& item)
     }
 
     remove_node(_data[index]);
-
+    
+    delete _data[index];
     _data[index] = nullptr;
 
     --_size;
