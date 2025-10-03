@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gravedata.h"
 #include <stdexcept>
 
 typedef unsigned long long hash_t;
@@ -25,6 +26,11 @@ template <typename T> hash_t hash(T obj)
 {
     no_hash::throw_for_type(typeid(T));
     return 0; // for linter
+}
+
+template <> hash_t hash(nmg::GraveData obj)
+{
+    return hash_integral(obj);
 }
 
 template <> hash_t hash<char>(char obj)
